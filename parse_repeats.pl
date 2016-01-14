@@ -14,7 +14,8 @@ use strict;
 use warnings;
 use Cwd;
 
-my $currdir = Cwd::abs_path();
+my $currdir = Cwd::abs_path($0);
+$currdir =~ s/\/[^\/]+$//;
 
 my $left = "";
 my $right = "";
@@ -24,6 +25,7 @@ my $multi = 0;
 my $cpus = 1;
 my $filter = $currdir."/filter_repeats_bam.py";
 my $samold = 0;
+my $nosingle = 0;
 foreach my $i (0..scalar(@ARGV)-1){
 	if($ARGV[$i] eq "-1"){
 		$left = $ARGV[$i+1];
@@ -40,17 +42,20 @@ foreach my $i (0..scalar(@ARGV)-1){
 	elsif($ARGV[$i] eq "-m" || $ARGV[$i] eq "--multi"){
 		$multi = 1;
 	}
+	elsif($ARGV[$i] eq "-s" || $ARGV[$i] eq "--nosingle"){
+		$nosingle = 1;
+	}
 	elsif($ARGV[$i] eq "-p"){
 		$cpus = $ARGV[$i+1];
 	}
-	elsif($ARGV[$i] eq "-s" || $ARGV[$i] eq "--samold"){
+	elsif($ARGV[$i] eq "-S" || $ARGV[$i] eq "--samold"){
 		$samold = 1;
 	}
 }
 
 if($left eq "" || $right eq ""){
-	print "Program usage:\n\tperl parse_repeats.pl -1 left -2 right"; 
-	print "[-o outfile -d distance -m/--multi -p cpus -s/--samold]\n\n";
+	print "Program usage:\n\tperl parse_repeats.pl -1 left -2 right "; 
+	print "[-o outpre -d distance -m/--multi -s/--nosingle -p cpus -S/--samold]\n\n";
 	die "Warning: Do not use -p option if samtools version < 0.1.19\n";
 }
 
@@ -119,11 +124,19 @@ if($outpre ne ""){
 }
 
 if(-e $filter){
+	my $filtercmd = "python ".$filter." -d ".$dist;
+	if($multi){
+		$filtercmd = $filtercmd." -m ";
+	}
+	if($nosingle){
+		$filtercmd = $filtercmd." -s ";
+	}
+	
 	if($samold){
-		$cmd = "samtools view -h ".$sorted.".bam | python ".$filter." -d ".$dist." | samtools view -bS - > ".$outfile;
+		$cmd = "samtools view -h ".$sorted.".bam | ".$filtercmd." | samtools view -bS - > ".$outfile;
 	}
 	else{
-		$cmd = "samtools view -h ".$sorted." | python ".$filter." -d ".$dist." | samtools view -bS - > ".$outfile;
+		$cmd = "samtools view -h ".$sorted." | ".$filtercmd." | samtools view -bS - > ".$outfile;
 	}
 }
 else{

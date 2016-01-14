@@ -17,8 +17,9 @@ perl parse_repeats.pl -1 left.bam -2 right.bam [-o outpre -d distance -m/--multi
 				with prefix ‘parsed’. In its absence files will be output in current directory.
 -d INT        	maximum acceptable distance between mates. Includes the length of forward and reverse reads. Default=1000.
 -m/--multi    	allow multi-mapping reads.
+-s/--nosingle	skip singleton alignments
 -p INT        	number of CPUs for merging and sorting steps. Default=1.
--s/--samold   	use this option if samtools version < 0.1.19.
+-S/--samold   	use this option if samtools version < 0.1.19.
 
 2. filter_repeats_bam.py
 
@@ -31,13 +32,14 @@ d.	If multi-mapping reads are not allowed, and multiple alignments are obtained 
 	singleton read is discarded.
 
 The program usage is:
-python filter_repeats_bam.py [-o <outfile>] [-d/--distance maxDist] [-n/--debug] [-m/--multi]
+python filter_repeats_bam.py [-o <outfile>] [-d/--distance maxDist] [-n/--debug] [-m/--multi] [-s/--nosingle]
 
 -o FILE             output file. SAM format. By default, output goes to STDOUT.
 -d/--distance INT   maximum acceptable distance between mates. Includes the length of forward and reverse reads. Default=1000.
 -n/--debug          run in debug mode. Outputs 100 valid alignments to outfile and reports details about processed 
 					and parsed alignments.
 -m/--multi          allow multi-mapping reads
+-s/--nosingle		skip singleton alignments
 
 Notes:
 1. 	This script can be run by itself if the first three steps - modifying right read IDs, merging left and right reads, 

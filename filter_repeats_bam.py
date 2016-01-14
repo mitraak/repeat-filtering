@@ -304,7 +304,7 @@ def output_sam(align, handle=None):
     return len(sam_align)
     
 def usage():
-    print 'python parse_repeats.py -i <infile> -o <outfile>',
+    print 'python filter_repeats_bam.py -i <infile> -o <outfile>',
     print '[-d/--distance maxDist] [-n/--debug] [-m/--multi] [-s/--nosingle]'
     
 def main(argv):
@@ -316,7 +316,7 @@ def main(argv):
     multi = False
     nosingle = False
     try:
-        opts, args = getopt.getopt(argv,'hi:o:d:nm',\
+        opts, args = getopt.getopt(argv,'hi:o:d:nms',\
                                    ['help','ifile=','ofile=',\
                                     'distance=','debug','multi','nosingle'])
     except getopt.GetoptError as err:
