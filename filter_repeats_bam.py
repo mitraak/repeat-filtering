@@ -5,7 +5,7 @@
 import re
 import sys, getopt
 
-def distance(infile, outfile=None, maxDist=1e5, multi=False, debug=False):
+def distance(infile, outfile=None, maxDist=1e5, multi=False, nosingle=False, debug=False):
     if infile != 'stdin':
         raise ValueError('Function can only be used with standard input')
 
@@ -66,17 +66,19 @@ def distance(infile, outfile=None, maxDist=1e5, multi=False, debug=False):
                         if not single:      # if not singleton
                             validcount += output_sam(final, o)
                         else:
-                            validcount += len(final)
-                            for i in xrange(len(final)):
-                                o.write('\t'.join(final[i]) + '\n')
+                            if not nosingle:
+                                validcount += len(final)
+                                for i in xrange(len(final)):
+                                    o.write('\t'.join(final[i]) + '\n')
                     else:
                         for i in xrange(len(final)):
                             if not single:
                                 validcount += output_sam(final)
                             else:
-                                validcount += len(final)
-                                for i in xrange(len(final)):
-                                    print '\t'.join(final[i])
+                                if not nosingle:
+                                    validcount += len(final)
+                                    for i in xrange(len(final)):
+                                        print '\t'.join(final[i])
             else:
                 if debug:
                     print '\nNo valid alignments!'
@@ -117,16 +119,18 @@ def distance(infile, outfile=None, maxDist=1e5, multi=False, debug=False):
                     if not single:      # if not singleton
                         validcount += output_sam(final, o)
                     else:
-                        validcount += len(final)
-                        for i in xrange(len(final)):
-                            o.write('\t'.join(final[i]) + '\n')
+                        if not nosingle:
+                            validcount += len(final)
+                            for i in xrange(len(final)):
+                                o.write('\t'.join(final[i]) + '\n')
                 else:                    
                     if not single:
                         validcount += output_sam(final)
                     else:
-                        validcount += len(final)
-                        for i in xrange(len(final)):
-                            print '\t'.join(final[i])
+                        if not nosingle:
+                            validcount += len(final)
+                            for i in xrange(len(final)):
+                                print '\t'.join(final[i])
     if outfile != None:
         o.close()
     else:
@@ -301,7 +305,7 @@ def output_sam(align, handle=None):
     
 def usage():
     print 'python parse_repeats.py -i <infile> -o <outfile>',
-    print '[-d/--distance maxDist] [-n/--debug] [-m/--multi]'
+    print '[-d/--distance maxDist] [-n/--debug] [-m/--multi] [-s/--nosingle]'
     
 def main(argv):
     infile = ''
@@ -310,10 +314,11 @@ def main(argv):
     debug = False
     maxDist = 1e5
     multi = False
+    nosingle = False
     try:
         opts, args = getopt.getopt(argv,'hi:o:d:nm',\
                                    ['help','ifile=','ofile=',\
-                                    'distance=','debug','multi'])
+                                    'distance=','debug','multi','nosingle'])
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -334,9 +339,11 @@ def main(argv):
             debug = True
         elif opt in ('-m','--multi'):
             multi = True
+        elif opt in ('-s','--nosingle'):
+            nosingle = True
    
     if mode == 'distance':
-        distance('stdin', outfile, maxDist, multi, debug)   
+        distance('stdin', outfile, maxDist, multi, nosingle, debug)   
     
 if __name__ == '__main__':
     main(sys.argv[1:])
