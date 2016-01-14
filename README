@@ -9,7 +9,7 @@ Perl script to run the repeat filtering algorithm starting from BAM files. The s
 4.	Filters alignments using filter_repeats_bam.py 
 
 The program usage is:
-perl parse_repeats.pl -1 left.bam -2 right.bam [-o outpre -d distance -m/--multi -p cpus –n/--debug -s/--samold]
+perl parse_repeats.pl -1 left.bam -2 right.bam [-o outpre -d distance -m/--multi -s/--nosingle -p cpus –n/--debug -S/--samold]
 
 -1 FILE			aligned left reads. BAM format.
 -2 FILE			aligned right reads. BAM format.
