@@ -12,9 +12,9 @@
 
 use strict;
 use warnings;
+use Cwd;
 
-my $currdir = $0;
-$currdir =~ s/\/[^\/]+$//;
+my $currdir = Cwd::abs_path();
 
 my $left = "";
 my $right = "";
