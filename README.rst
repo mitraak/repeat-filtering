@@ -15,17 +15,17 @@ Perl script to run the repeat filtering algorithm starting from BAM files. The s
 Program usage
 -------------
 
-`perl parse_repeats.pl -1 left.bam -2 right.bam [-o outpre -d distance -m/--multi -s/--nosingle -p cpus –n/--debug -S/--samold]`
+``perl parse_repeats.pl -1 left.bam -2 right.bam [-o outpre -d distance -m/--multi -s/--nosingle -p cpus –n/--debug -S/--samold]``
 
 
  -1 FILE		aligned left reads. BAM format.
  -2 FILE		aligned right reads. BAM format.
  -o TEXT		prefix for output files. Can include directory, e.g. ‘–o test/parsed’ will write files in directory ‘test’ with prefix ‘parsed’. In its absence files will be output in current directory.
  -d INT        		maximum acceptable distance between mates. Includes the length of forward and reverse reads. Default=1000.
- -m/--multi    		allow multi-mapping reads. 
- -s/--nosingle  	skip singleton alignments. 
+ -m, --multi    		allow multi-mapping reads. 
+ -s, --nosingle  	skip singleton alignments. 
  -p INT        		number of CPUs for merging and sorting steps. Default=1. 
- -S/--samold   		use this option if samtools version < 0.1.19. 
+ -S, --samold   		use this option if samtools version < 0.1.19. 
 
 filter_repeats_bam.py
 ---------------------
@@ -40,14 +40,14 @@ Python program to perform filtering. Briefly,
 Program usage
 -------------
 
-`python filter_repeats_bam.py [-o <outfile>] [-d/--distance maxDist] [-n/--debug] [-m/--multi] [-s/--nosingle]`
+``python filter_repeats_bam.py [-o <outfile>] [-d/--distance maxDist] [-n/--debug] [-m/--multi] [-s/--nosingle]``
 
 
  -o FILE             		output file. SAM format. By default, output goes to STDOUT.
- -d/--distance INT		maximum acceptable distance between mates. Includes the length of forward and reverse reads. Default=1000.
- -n/--debug          		run in debug mode. Outputs 100 valid alignments to outfile and reports details about processed and parsed alignments.
- -m/--multi          		allow multi-mapping reads.
- -s/--nosingle	   		skip singleton alignments.
+ -d, --distance INT		maximum acceptable distance between mates. Includes the length of forward and reverse reads. Default=1000.
+ -n, --debug          		run in debug mode. Outputs 100 valid alignments to outfile and reports details about processed and parsed alignments.
+ -m, --multi          		allow multi-mapping reads.
+ -s, --nosingle	   		skip singleton alignments.
 
 Notes:
 ------
